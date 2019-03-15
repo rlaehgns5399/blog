@@ -1,7 +1,7 @@
 ---
-title: "[WEB/De User에 대한 명령어 공부"
-date: 2019-03-12 20:25:28 -0400
-categories: linux/ubuntu
+title: "[WEB/Develop] 에코노베이션 관리 홈페이지 기획"
+date: 2019-03-16 01:09:28 -0400
+categories: WEB
 
 ---
 
