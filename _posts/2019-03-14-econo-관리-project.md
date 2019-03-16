@@ -1,7 +1,7 @@
 ---
 title: "[WEB/Develop] 에코노베이션 관리 홈페이지 기획"
 date: 2019-03-16 01:09:28 -0400
-categories: WEB
+categories: Web
 
 ---
 

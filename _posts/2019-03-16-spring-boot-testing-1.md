@@ -1,7 +1,7 @@
 ---
 title: "[Spring] 컨트롤러 테스트 가이드 in Spring Boot"
 date: 2019-03-16 18:09:28 -0400
-categories:study Spring
+categories: Java/Spring
 
 ---
 

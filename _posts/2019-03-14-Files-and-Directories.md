@@ -1,7 +1,7 @@
 ---
 title: "[Linux/Ubuntu] File과 Directoriy 관련 명령어"
 date: 2019-03-14 20:25:28 -0400
-categories: linux/ubuntu
+categories: Linux/Ubuntu
 ---
 
 # File 
