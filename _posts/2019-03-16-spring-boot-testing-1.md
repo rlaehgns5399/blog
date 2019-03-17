@@ -11,54 +11,66 @@ categories: Java/Spring
 >
 > 번역을 반겨주셨던 The Practical Developer님께 감사를 표합니다.
 
-#### 목차
 
-1. Spring Boot에서 RestController에 대한 단위 테스트, 통합 테스트를 하는 방법
 
-2. 개요
+## 목차
 
-   2.1. [The sample application](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#The_sample_application)
 
-   2.2. Server and Client Side Tests](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Server_and_Client_Side_Tests)
 
-- [Server-Side Tests](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Server-Side_Tests)
-- Inside-Server Tests
-  - Strategy 1: MockMVC in Standalone Mode
-    - MockMVC standalone code example
-      - [MockitoJUnitRunner and MockMVC](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#MockitoJUnitRunner_and_MockMVC)
-      - [JacksonTester initialization](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#JacksonTester_initialization)
-      - [Configure the Standalone Setup in MockMVC](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Configure_the_Standalone_Setup_in_MockMVC)
-      - [Testing ControllerAdvices and Filters with MockMVC](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Testing_ControllerAdvices_and_Filters_with_MockMVC)
-      - [Better Assertions with BDDMockito and AssertJ](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Better_Assertions_with_BDDMockito_and_AssertJ)
-  - Strategy 2: MockMVC with WebApplicationContext
-    - MockMVC and WebMvcTest code example
-      - [SpringRunner](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#SpringRunner)
-      - [MockMVC Autoconfiguration](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#MockMVC_Autoconfiguration)
-      - [Overriding beans for testing using MockBean](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Overriding_beans_for_testing_using_MockBean)
-      - [No server calls](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#No_server_calls)
-    - [Using MockMVC with a Web Application Context – Conclusions](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Using_MockMVC_with_a_Web_Application_Context_Conclusions)
-- Outside-Server Tests
-  - [Strategy 3: SpringBootTest with a MOCK WebEnvironment value](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Strategy_3_SpringBootTest_with_a_MOCK_WebEnvironment_value)
-  - Strategy 4: SpringBootTest with a Real Web Server
-    - Spring Boot Test Code Example
-      - [Web Server Testing](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Web_Server_Testing)
-      - [Mocking layers](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Mocking_layers)
-      - [TestRestTemplate](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#TestRestTemplate)
-    - [SpringBootTest approach – Conclusions](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#SpringBootTest_approach_Conclusions)
-  - [Performance and Context Caching](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Performance_and_Context_Caching)
-- [Conclusion](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Conclusion)ty
+>1. Spring Boot에서 RestController에 대한 단위 테스트, 통합 테스트를 하는 방법
+>
+>2. 개요
+>
+>   2.1. [The sample application](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#The_sample_application)
+>
+>   2.2. Server and Client Side Tests](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Server_and_Client_Side_Tests)
+>
+>- [Server-Side Tests](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Server-Side_Tests)
+>- Inside-Server Tests
+>  - Strategy 1: MockMVC in Standalone Mode
+>    - MockMVC standalone code example
+>      - [MockitoJUnitRunner and MockMVC](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#MockitoJUnitRunner_and_MockMVC)
+>      - [JacksonTester initialization](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#JacksonTester_initialization)
+>      - [Configure the Standalone Setup in MockMVC](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Configure_the_Standalone_Setup_in_MockMVC)
+>      - [Testing ControllerAdvices and Filters with MockMVC](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Testing_ControllerAdvices_and_Filters_with_MockMVC)
+>      - [Better Assertions with BDDMockito and AssertJ](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Better_Assertions_with_BDDMockito_and_AssertJ)
+>  - Strategy 2: MockMVC with WebApplicationContext
+>    - MockMVC and WebMvcTest code example
+>      - [SpringRunner](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#SpringRunner)
+>      - [MockMVC Autoconfiguration](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#MockMVC_Autoconfiguration)
+>      - [Overriding beans for testing using MockBean](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Overriding_beans_for_testing_using_MockBean)
+>      - [No server calls](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#No_server_calls)
+>    - [Using MockMVC with a Web Application Context – Conclusions](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Using_MockMVC_with_a_Web_Application_Context_Conclusions)
+>- Outside-Server Tests
+>  - [Strategy 3: SpringBootTest with a MOCK WebEnvironment value](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Strategy_3_SpringBootTest_with_a_MOCK_WebEnvironment_value)
+>  - Strategy 4: SpringBootTest with a Real Web Server
+>    - Spring Boot Test Code Example
+>      - [Web Server Testing](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Web_Server_Testing)
+>      - [Mocking layers](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Mocking_layers)
+>      - [TestRestTemplate](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#TestRestTemplate)
+>    - [SpringBootTest approach – Conclusions](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#SpringBootTest_approach_Conclusions)
+>  - [Performance and Context Caching](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Performance_and_Context_Caching)
+>- [Conclusion](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Conclusion)ty
 
 
 
 스프링 부트에서 컨트롤러(웹 또는 API  계층)를 테스트하기위한 여러 방법들이 있다. 몇몇은 순수한 단위테스트를 작성하기위한 지원들을 해주고 다른 몇몇은 통합테스트에 유용하다. 이 포스트에서는 standalone모드에서 MockMVC를 사용하여 스프링에서 사용가능한 크게 세가지의 테스트를 다룰 것이다.
 
-### Introduction 도입
+
+
+
+
+### Introduction ( 도입 )
 
 **스프링 부트**에서는 테스팅을 위한 몇가지 접근법들이 있다. 이것들은 지속적으로 진화하는 framework이고, 새로운 버전에는 더 많은 옵션들이 추가된다. 동시에 오래된 것들은 (at the same time that old ones are kept for the sake of backward compatibility.). 그 결과로 코드의 일부를 테스트 하기위한 수많은 방법들이 생겼고, and some unclarity about when to use what.  이 글에서는 독자들이 테스트를 위한 다른 관점들을 이해하도록 돕고, 각 방법들이 왜 유용한지, 또 언제 써야하는지 설명할 것이다. 
 
 이 글에서는 가장 모호한 부분인 Controller 테스팅에 초점을 맞춘다. 컨트롤러 테스트는 mocking 객체가 각기 다른 레벨들에서 쓰여질수 있는 등의 이유로 가장 모호하기 때문에.
 
-### The sample application 예시 프로그램
+
+
+
+
+### The sample application ( 예시 프로그램 )
 
 우리는 각기 다른 개념들을 연습하기위해  이글에서 몇몇의 예시 코드를 사용할 것이다. 
 
@@ -72,7 +84,9 @@ categories: Java/Spring
 
 
 
-### Server and Client Side Tests 서버 사이드 테스트 vs 클라이언트 사이드 테스트
+
+
+### Server and Client Side Tests ( 서버 사이드 테스트 vs 클라이언트 사이드 테스트 )
 
 먼저, 서버사이드와 클라이언트 사이드를 분리해보자.
 
@@ -84,9 +98,13 @@ categories: Java/Spring
 
 
 
+
+
 ### Server-Side Tests
 
 서버사이드 테스트의 안을 들여다보면, 우리가 스프링에서 구별할 수 있는 두가지 방식이 있다. 첫번째는 MockMVC접근을 사용하여 Controller 테스트를 작성하는 것이고, 두번째는 RestTemplate을 이용하는 것이다. 만약에 당신이 Real 단위 테스트를 작성하고 싶다면, 첫번째 방식(MockMVC)를 택해야한다. 반면 통합테스트를 작성하고 싶다면 RestTemplate을 사용해야한다. 왜냐면 MockMVC를 이용하면 Controller에 대한 assertion(참이라고 가정되는 조건문)들을 [fine-grain](https://icthuman.tistory.com/entry/FineGrained-vs-CoarseGrained) 할수있다 (= 컨트롤러에 대한 테스트를 세분화 할수 있다는 의미). 반면 RestTemplate은 Spring의 WebApplicationContext를 (Standalone모드 여부에 따라 부분적으로 또는 완전히) 이용한다. 이 두가지에 대해 더 자세히 설명해보자.
+
+
 
 
 
@@ -96,11 +114,17 @@ categories: Java/Spring
 
 
 
+
+
 ## **Strategy 1: MockMVC in Standalone Mode**
 
 ![Test MockMVC Standalone](https://thepracticaldeveloper.com/wp-content/uploads/2017/07/tests_mockmvc_wm.png)
 
  스프링 standalone 모드에서 MockMVC를 사용한다면, inside-server test를 작성할 수 있다. 이렇게 함으로써 어떠한 contect도 로딩하지 않고 테스트 할 수 있게 된다. 아래 예시를 봐보자
+
+
+
+
 
 ### MockMVC standalone code example (MockMVC 독립형 코드 예시)
 
@@ -264,6 +288,9 @@ public void setup() {
             .build();
 }
 ```
+
+
+
 
 
 ### JacksonTester **initialization** ( JacksonTester 초기화 )
