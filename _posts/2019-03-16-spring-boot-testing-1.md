@@ -440,7 +440,7 @@ Standalone mode와 비교했을때 큰 차이점들이 있다.
 
 
 
-#### SpringRunner
+### SpringRunner
 
 위 테스트는 SpringRunner와 함께 실행된다. 그리고 이 사실이 context가 초기화되는 방법을 설명한다. 테스트를 실행할때 시작부분에서 어떻게 context가 빈들을 로딩하고 주입하는지 확인 할 수 있다.
 
@@ -448,11 +448,69 @@ Standalone mode와 비교했을때 큰 차이점들이 있다.
 
 
 
-#### MockMVC Autoconfiguration
+### MockMVC Autoconfiguration
 
 @WebMVCTest 어노테이션을 사용하면 MockMVC 인스턴스가 자동설정되고, context에서 사용이 가능해진다. ( 그래서 아래 코드에서 보이듯이, autowire을 사용할 수 있다. ) 게다가 우리는 테스트할 컨트롤러 클래스를 annotation에 설정 할 수 있다. spring은 해당 부분 컨텍스트( 컨트롤러및 그 주변 구성)만 로딩할 것이다.
 
 annotaion의 수행은 Filter와 Controller Advice도 주입되어야 한다는걸 알정도로 똑똑해서 이 경우에는 setup() 메서드에 해당 설정들이 없습니다.
+
+### Overriding beans for testing using MockBean
+
+( MockBean을 사용해서 테스용 빈들로 오버라이딩하기)
+
+현재 코드엔 @MockBean 어노테이션을 사용하여 repository가 spring context에 주입되어 있습니다. 컨트롤러가 주입되어 사용할 수 있기 때문에, We don’t need to make any reference to our controller class apart from the one in the annotation. 이 bean은 단지 진짜 repository의 역할을 대신할 것입니다.
+
+
+
+### No server calls (서버 호출이 없습니다)
+
+현재 우리가 테스트하고있는 response들도 가짜라는 사실을 명심해야합니다. 또한 이 테스트에는 어떠한 서버도 없습니다. 그래도 이 테스트는 controller 클래스 안의 로직과 체크하고 있기 때문에 타당한 테스트입니다. 동시에 주변 클래들도 테스트합니다.(**SuperHeroExceptionHandler**` and `**SuperHeroFilter**).
+
+
+
+### Using MockMVC with a Web Application Context – Conclusions
+
+( Web Application Context 와 함께 MockMVC 이용하기 : 결론 )
+
+가장 중요한 차이점은 Spring의  context가 있기때문에 주변 배우들을 명시적으로 호출할 필요가 없다는 점입니다. 만약 새 필터나, 새 controllerAdvice나 또는 이 request-response 프로세스에 참여하는 다른 배우들을 생성한다면, 그것들은 자동으로 테스트에 주입될것입니다. 그러므로 우는 매뉴얼적인 구성에 대해 신경쓸 필요가 없습니다.  테스트에서 무얼 사용하는지에 대한 세밀한 제어는 없지만, 이는 실제로 일어나는 것과 더 가깝습니다. 어플리케이션을 실행할때 모든 요소들이 기본적으로 존재하니까요.
+
+통합테스트에 조그만 변화가 있는것을 확인할수 있을겁니다. 이번엔 filter와 controller adice를 참조하지않고 즉시 테스트하고 있습니다. 만약 나중에 이 request-reponse flow에 개입하는 다른 클래스를 포함하면, 이 테스트에도 참여하게 됩니다.
+
+만약 이 테스트가 한클래스의 동작 이상을 포함하게 된다면, 당신은 이 테스트릁 그 클래스 간의 통합테스트로 여겨도 됩니다. 이 경계는 모호한것 입니다. 당신은 테스트에 한 컨트롤러만 있다고 주장 할 수 있겠지만, 적절히 이 테스트를 수행하기 위해선 추가적인 구성이 필요합니다. 
+
+## Outside-Server Tests
+
+테스트를 위해 HTTP request를 application으로 보내고 있다면, 이른바 outside-server test를 수행하고 있는 것입니다. 이렇게 밖에 있을때에도 우리는 mock을 테스트들에 주입해서 단위테스트 비슷하게 코드를 짤수 있습니다. 예를들면, 간단한 3-계층의 어플리케이션이 있을때, service 층을 가짜로 구성해서 웹서버를 통해 컨트롤러만 테스트 할 수 있습니다. 하지만 실제로 이 접근법은 단위테스트보다 훨씬 무겁습니다. 특별히 configuration을 제외시키거나, 필요한것들만 불러오도록 설정하는 등 스프링을 설정하지 않으면 전체 어플리케이션 context를 로딩합니다.
+
+스프링에선 **RestTemplate를 사용하여 request들을 보내** REST controller들에 대한 outside-server test를 작성할 수 있습니다. 또는 통합테스트를 위해 유용한 기능들 (권한 헤더나, 오류 용인 헤더등을 포함한)을 보유한 새로운 TestRestTemplate를 이용할 수도 있습니다.
+
+스프링 부트에서는 @SpringBootTest 어노테이션을 이용할 수 있습니다. 그러면 context로 주입된 몇몇 bean들을 얻을 수 있고, 또한 **application.properties** 등 에서 로드된 속성들에 접근 할 수 있습니다. 이는 테스트를 위해 스프링부트의 전체를 제공하는 @ContextConfiguration을 대신할 수 있습니다.
+
+스프링부트에서 테스트 전략들은 특징들의 수나 사용할 수 있는 옵션들을 감안할때 복잡하게 여겨질 것입니다. 이제부터 그 전략들을 살펴봅니다. 
+
+
+
+### Strategy 3: SpringBootTest with a MOCK WebEnvironment value
+
+**@SpringBootTest**` 또는 **@SpringBootTest(webEnvironment = WebEnvironment.MOCK)**를 사용할때는 진짜 **HTTP server**을 로드할 필요가 없습니다. 어디서 들어본 말인가요?
+
+**이는 2번째 전략 MockMVC with anplication context 와 비슷한 접근법입니다.** 즉 이론상으로 outside-server 테스트를 작성하기 위해서 @SpringBootTest를 사용해야 하지만, WebEnviroment를 mock으로 세팅했다면 우리는 inside-server 테스트로 전환하게 됩니다.
+
+우리는 web server가 없기때문에 RestTemplate를 사용할 수 없지만, 그래서 @AutoconfigureMockMVC라는 외부 어노테이션을 통해 구성된 MockMVC를 사용합니다.  제 생각엔 이 방법은 모든방법중 가장 까다로운 방법입니다. 개인적으로 추천드리지 않습니다.
+
+MockMVC와 특정 컨트롤러를 위해 띄워진 context를 이용한 두번째 전략이 더 낫습니다. ( 테스트 하고자 하는것을 더 잘 조작할 수 있기때문에 )
+
+
+
+
+
+## Strategy 4: SpringBootTest with a Real Web Server
+
+![Spring Boot Test](https://thepracticaldeveloper.com/wp-content/uploads/2017/07/tests_springboot_wm-1.png)
+
+
+
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT) 또는 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)를 사용할때는 실제 HTTP server로 테스트를 하는것이다. 이때 RestTemplate 또는 TestRestTemplate를 이용할 필요가 있다. 랜덤 포트를 사용하는것과 지정된 포트를 사용하는 것의 차이는 단지 기본값 8080포트( server.port 속성으로 지정했을때는 그 포트)는 사용되지않고, 임의로 지정된 포트번호를 사용한다는 점 뿐이다. 이는 병렬 테스트를 진행할때 포트 충돌을 피하는데 도움이 된다. 다음 코드를 보고 주요한 특징을 설명 하겠습니다.
 
 
 
