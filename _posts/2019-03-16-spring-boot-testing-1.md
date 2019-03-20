@@ -5,7 +5,7 @@ categories: Java/Spring
 
 ---
 
-## Spring Boot에서 RestController에 대한 단위 테스트, 통합 테스트를 하는 방법
+# Spring Boot에서 RestController에 대한 단위 테스트, 통합 테스트를 하는 방법
 
 > 이글은 [The Practical Developer](https://www.facebook.com/thepracticaldeveloper/)님의 게시글인  **"[Guide to Testing Controllers in Spring Boot](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#comment-401)"**을 허가받아 번역한 글임을 밝힙니다.
 >
@@ -17,40 +17,36 @@ categories: Java/Spring
 
 
 
->1. Spring Boot에서 RestController에 대한 단위 테스트, 통합 테스트를 하는 방법
->
->2. 개요
->
->   2.1. [The sample application](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#The_sample_application)
->
->   2.2. Server and Client Side Tests](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Server_and_Client_Side_Tests)
->
->- [Server-Side Tests](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Server-Side_Tests)
->- Inside-Server Tests
->  - Strategy 1: MockMVC in Standalone Mode
->    - MockMVC standalone code example
->      - [MockitoJUnitRunner and MockMVC](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#MockitoJUnitRunner_and_MockMVC)
->      - [JacksonTester initialization](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#JacksonTester_initialization)
->      - [Configure the Standalone Setup in MockMVC](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Configure_the_Standalone_Setup_in_MockMVC)
->      - [Testing ControllerAdvices and Filters with MockMVC](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Testing_ControllerAdvices_and_Filters_with_MockMVC)
->      - [Better Assertions with BDDMockito and AssertJ](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Better_Assertions_with_BDDMockito_and_AssertJ)
->  - Strategy 2: MockMVC with WebApplicationContext
->    - MockMVC and WebMvcTest code example
->      - [SpringRunner](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#SpringRunner)
->      - [MockMVC Autoconfiguration](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#MockMVC_Autoconfiguration)
->      - [Overriding beans for testing using MockBean](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Overriding_beans_for_testing_using_MockBean)
->      - [No server calls](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#No_server_calls)
->    - [Using MockMVC with a Web Application Context – Conclusions](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Using_MockMVC_with_a_Web_Application_Context_Conclusions)
->- Outside-Server Tests
->  - [Strategy 3: SpringBootTest with a MOCK WebEnvironment value](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Strategy_3_SpringBootTest_with_a_MOCK_WebEnvironment_value)
->  - Strategy 4: SpringBootTest with a Real Web Server
->    - Spring Boot Test Code Example
->      - [Web Server Testing](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Web_Server_Testing)
->      - [Mocking layers](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Mocking_layers)
->      - [TestRestTemplate](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#TestRestTemplate)
->    - [SpringBootTest approach – Conclusions](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#SpringBootTest_approach_Conclusions)
->  - [Performance and Context Caching](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Performance_and_Context_Caching)
->- [Conclusion](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Conclusion)ty
+>1. [Unit and Integration Tests for RestControllers in Spring Boot](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Unit_and_Integration_Tests_for_RestControllers_in_Spring_Boot)
+>2. [Introduction](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Introduction)
+>  2.1. [The sample application](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#The_sample_application)
+>  2.2. [Server and Client Side Tests](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Server_and_Client_Side_Tests)
+>3. [Server-Side Tests](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Server-Side_Tests)
+>4. [Inside-Server Tests](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Inside-Server_Tests)
+>   4.1. [Strategy 1: MockMVC in Standalone Mode](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Strategy_1_MockMVC_in_Standalone_Mode)
+>   	​	4.1.1. [MockMVC standalone code example](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#MockMVC_standalone_code_example)
+>   	​		4.1.1.1. [MockitoJUnitRunner and MockMVC](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#MockitoJUnitRunner_and_MockMVC)
+>   	​		4.1.1.2. [JacksonTester initialization](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#JacksonTester_initialization)
+>   	​		4.1.1.3. [Configure the Standalone Setup in MockMVC](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Configure_the_Standalone_Setup_in_MockMVC)
+>   	​		4.1.1.4. [Testing ControllerAdvices and Filters with MockMVC](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Testing_ControllerAdvices_and_Filters_with_MockMVC)
+>   	​		4.1.1.5. [Better Assertions with BDDMockito and AssertJ](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Better_Assertions_with_BDDMockito_and_AssertJ)
+>   4.2. [Strategy 2: MockMVC with WebApplicationContext](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Strategy_2_MockMVC_with_WebApplicationContext)
+>   	​	4.2.1. [MockMVC and WebMvcTest code example](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#MockMVC_and_WebMvcTest_code_example)
+>   	​		4.2.1.1. [SpringRunner](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#SpringRunner)
+>   	​		4.2.1.2. [MockMVC Autoconfiguration](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#MockMVC_Autoconfiguration)
+>   	​		4.2.1.3. [Overriding beans for testing using MockBean](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Overriding_beans_for_testing_using_MockBean)
+>   	​		4.2.1.4. [No server calls](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#No_server_calls)
+>   	​	4.2.2. [Using MockMVC with a Web Application Context – Conclusions](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Using_MockMVC_with_a_Web_Application_Context_Conclusions)
+>5. [Outside-Server Tests](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Outside-Server_Tests)
+>   5.1. [Strategy 3: SpringBootTest with a MOCK WebEnvironment value](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Strategy_3_SpringBootTest_with_a_MOCK_WebEnvironment_value)
+>   5.2. [Strategy 4: SpringBootTest with a Real Web Server](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Strategy_4_SpringBootTest_with_a_Real_Web_Server)
+>   	5.2.1. [Spring Boot Test Code Example](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Spring_Boot_Test_Code_Example)
+>   		5.2.1.1. [Web Server Testing](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Web_Server_Testing)
+>   		5.2.1.2. [Mocking layers](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Mocking_layers)
+>   		5.2.1.3. [TestRestTemplate](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#TestRestTemplate)
+>   	5.2.2. [SpringBootTest approach – Conclusions](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#SpringBootTest_approach_Conclusions)
+>   5.3. [Performance and Context Caching](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Performance_and_Context_Caching)
+>6. [Conclusion](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Conclusion)
 
 
 
@@ -513,6 +509,170 @@ MockMVC와 특정 컨트롤러를 위해 띄워진 context를 이용한 두번�
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT) 또는 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)를 사용할때는 실제 HTTP server로 테스트를 하는것이다. 이때 RestTemplate 또는 TestRestTemplate를 이용할 필요가 있다. 랜덤 포트를 사용하는것과 지정된 포트를 사용하는 것의 차이는 단지 기본값 8080포트( server.port 속성으로 지정했을때는 그 포트)는 사용되지않고, 임의로 지정된 포트번호를 사용한다는 점 뿐이다. 이는 병렬 테스트를 진행할때 포트 충돌을 피하는데 도움이 된다. 다음 코드를 보고 주요한 특징을 설명 하겠습니다.
 
 
+
+## Spring Boot Test Code Example
+
+```java
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+public class SuperHeroControllerSpringBootTest {
+ 
+    @MockBean
+    private SuperHeroRepository superHeroRepository;
+ 
+    @Autowired
+    private TestRestTemplate restTemplate;
+ 
+    @Test
+    public void canRetrieveByIdWhenExists() {
+        // given
+        given(superHeroRepository.getSuperHero(2))
+                .willReturn(new SuperHero("Rob", "Mannon", "RobotMan"));
+ 
+        // when
+        ResponseEntity<SuperHero> superHeroResponse = restTemplate.getForEntity("/superheroes/2", SuperHero.class);
+ 
+        // then
+        assertThat(superHeroResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(superHeroResponse.getBody().equals(new SuperHero("Rob", "Mannon", "RobotMan")));
+    }
+ 
+    @Test
+    public void canRetrieveByIdWhenDoesNotExist() {
+        // given
+        given(superHeroRepository.getSuperHero(2))
+                .willThrow(new NonExistingHeroException());
+ 
+        // when
+        ResponseEntity<SuperHero> superHeroResponse = restTemplate.getForEntity("/superheroes/2", SuperHero.class);
+ 
+        // then
+        assertThat(superHeroResponse.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        assertThat(superHeroResponse.getBody()).isNull();
+    }
+ 
+    @Test
+    public void canRetrieveByNameWhenExists() {
+        // given
+        given(superHeroRepository.getSuperHero("RobotMan"))
+                .willReturn(Optional.of(new SuperHero("Rob", "Mannon", "RobotMan")));
+ 
+        // when
+        ResponseEntity<SuperHero> superHeroResponse = restTemplate
+                .getForEntity("/superheroes/?name=RobotMan", SuperHero.class);
+ 
+        // then
+        assertThat(superHeroResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(superHeroResponse.getBody().equals(new SuperHero("Rob", "Mannon", "RobotMan")));
+    }
+ 
+    @Test
+    public void canRetrieveByNameWhenDoesNotExist() {
+        // given
+        given(superHeroRepository.getSuperHero("RobotMan"))
+                .willReturn(Optional.empty());
+ 
+        // when
+        ResponseEntity<SuperHero> superHeroResponse = restTemplate
+                .getForEntity("/superheroes/?name=RobotMan", SuperHero.class);
+ 
+        // then
+        assertThat(superHeroResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(superHeroResponse.getBody()).isNull();
+    }
+ 
+    @Test
+    public void canCreateANewSuperHero() {
+        // when
+        ResponseEntity<SuperHero> superHeroResponse = restTemplate.postForEntity("/superheroes/",
+                new SuperHero("Rob", "Mannon", "RobotMan"), SuperHero.class);
+ 
+        // then
+        assertThat(superHeroResponse.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+    }
+ 
+    @Test
+    public void headerIsPresent() throws Exception {
+        // when
+        ResponseEntity<SuperHero> superHeroResponse = restTemplate.getForEntity("/superheroes/2", SuperHero.class);
+ 
+        // then
+        assertThat(superHeroResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(superHeroResponse.getHeaders().get("X-SUPERHERO-APP")).containsOnly("super-header");
+    }
+ 
+}
+```
+
+차이점을 중심으로 보겠습니다.
+
+
+
+### 1. Web Server Testing
+
+테스트 구동을 위해 SpringRunner를 이용하지만, RANDOM_PORT 모드를 명시하기 위해 @SpringBootTest 어노테이션을 붙입니다. 그렇게 함으로써 웹서버가 실행되고, 테스트를 진행합니다.
+
+위 18번째줄 코드에서 외부 서버에 도착하려고 했을때와 같이, 템플릿을 이용해 request들을 발생시킵니다.
+
+이젠 검증하고자 하는 response가 MockHttpServletResponse 대신 ResponseEntity이기 때문에 테스트에 조금의 변화가 있습니다
+
+```JAVA
+ @Test
+    public void canRetrieveByIdWhenExists() {
+        // given
+        given(superHeroRepository.getSuperHero(2))
+                .willReturn(new SuperHero("Rob", "Mannon", "RobotMan"));
+ 
+        // when
+        ResponseEntity<SuperHero> superHeroResponse = restTemplate.getForEntity("/superheroes/2", SuperHero.class); // Line 18
+ 
+        // then
+        assertThat(superHeroResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(superHeroResponse.getBody().equals(new SuperHero("Rob", "Mannon", "RobotMan")));
+    }
+```
+
+
+
+### 2. Mocking layers
+
+지금도 @MockBean 어노테이션으로 repository 계층을 가짜로 구성할 수 있습니다. ( 역 : real Server를 이용해 테스트하는 지금도 repository를 mocking할 수 있습니다.)
+
+
+
+### 3. TestRestTemplate
+
+@SpringBootTest 어노테이션을 사용함으로써 주입할 수 있는 TestRestTemplate bean을 얻을수 있습니다. 이 TestRestTemplat는 표준 RestTemplate와 똑같이 동작하지만, 이 전에 볼수 있듯이 추가적인 기능들을 제공합니다.
+
+
+
+### SpringBootTest approach – Conclusions 
+
+### ( 스프링부츠 테스트의 접근법 - 결론 )
+
+컨트롤러 계층을 테스트 한다는 목표는 같지만, 이 테스트(역 : @SpringBootTest 어노테이션을 이용하는 테스트)는 이전의 첫번째 전략(MockMVC in standalone mode) 과는 완전히 다른 관점으로 목표에 접근합니다. 전에는 주변배우(filter와 controller advice)도 없이 클래스만을 불러왔습니다. 하지만 이 테스트에서는 웹 서버를 포함해서 전체 Sprinng Boot context를 불러옵니다. SpringBootTest는 가장 무겁고, 단위테스트와도 가장 거리가 먼 테스트입니다.
+
+이 테스트는 주로 통합테스트에 사용됩니다. 이 테스트의 핵심은 context에 있는 빈들을 가짜로 구성해서 대체해도 여전히 스프링 부트의 다른 클래스간의 상호 동작을 웹서버도 참여한채로 검증할 수 있다는 것입니다.
+
+하지만 단위테스트에서는 이방법을 사용하지 않는것을 권장합니다. 테스트가 무거워질거고 내가 뭘 테스트 하고 있는지에 대한 컨트롤을 잃을수도 있습니다. 하지만 통합테스트에서는 이 방법을 추천드립니다. 이 테스트 방법은 어플리케이션에서 다른 요소들이 어떤 방식으로 함께 동작하는지 검증하는데 항상 유용합니다.
+
+## Performance and Context Caching
+
+지금 당신은 첫번재 전략이 성능면에서 다른 전략들보다 훨씬 최적이다 라고 생각할지도 모릅니다. 또는 테스트 할때마다 전체 Spring Boot Context를 로딩해야하니 끔찍하게 동작한다고 생각할지도 모르죠. 하지만 그생각들은 100% 맞는말은 아닙니다. 스프링(Boot가 포함된)을 테스트를 위해서 사용할때, application context는 같은 테스트 단위동안에는 기본적으로 재사용 됩니다.
+
+즉, 위 예시의 전략 2,3,4에서 Spring context는 첫번째 로딩된 이후호 재사용 됩니다. 하지만 주의하세요.  테스트가 context의 bean들을 수정하는 상황에서 context의 재사용은 부작용을 일으킬 수 있습니다. 만약 이런 상황이라면 @DirtiesContext 어노테이션으로 conntext를 다시 로드한다고 명시 함으로써 해결 할 수있습니다. ([관련 문서](https://docs.spring.io/spring/docs/current/spring-framework-reference/html/integration-testing.html#__dirtiescontext)를 확인하세요)
+
+# Conclusion
+
+보셨다시피, Spring Boot에는 컨트롤러들을 한개씩 따로 테스트하는 많은 전략들이 있습니다. 우리는 이 글에서 가장 가벼운 방법부터 가장 무거운 방법까지 다루었습니다. 이제 언제 어떤 테스트를 사용해야 하는지에 대해 개인적인 의견을 적어보려고 합니다.
+
+- 다른 것들의 동작은 배재한, 컨트롤러 로직만을 위한 단위테스트는 항상 작성하려고 해야합니다. 이때 첫번째 전략을 이용하세요 : **use MockMVC in Standalone mode**.
+- 웹 계층과 관련된 주변 행동들을 테스트 해야한다면 ( 필터링, 인터셉터, 권한 등) 네번째 전략을 이용하세요 : **SpringBootTest with a web server** on **a random port**. 
+  하지만, 이 테스트는 어플리케이션의 몇몇 부분들을 검증하는것 이기 때문에 분리된 통합테스트로 생각해야합니다. 필요하다면 순수 컨트롤러 층에대한 단위테스트를 해야 합니다. 즉, 테스트 단계들을 섞어버리는 것을 지양하고, 분리되도록 노력해야합니다.
+
+이 가이드가 유용했길 바랍니다, 피드백이 있다면 댓글을 통해 남겨주세요!
+
+이 가이드가 마음에 드셨나요? 제가 저술한 Learn Microservices with Spring Boot [on the Apress Store](http://www.kqzyfj.com/click-8535631-12831288?url=https%3A%2F%2Fwww.springer.com%2Fus%2Fbook%2F9781484231647%3Futm_medium%3Daffiliate%26utm_source%3Dcommission_junction_authors%26utm_campaign%3D3_nsn6445_product_PID%25zp%26utm_content%3Dus_10092017&cjsku=9781484231647) or [Amazon](http://amzn.to/2FSB2ME) 에서 더 많은 정보를 얻으실 수 있습니다.
 
 
 
