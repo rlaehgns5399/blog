@@ -32,7 +32,7 @@ categories: Java/Spring
 >   4.1. [Strategy 1: MockMVC in Standalone Mode](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Strategy_1_MockMVC_in_Standalone_Mode)
 >
 >   	4.1.1. [MockMVC standalone code example](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#MockMVC_standalone_code_example)	
->
+>	
 >			4.1.1.1. [MockitoJUnitRunner and MockMVC](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#MockitoJUnitRunner_and_MockMVC)
 >	
 >			4.1.1.2. [JacksonTester initialization](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#JacksonTester_initialization)
@@ -80,7 +80,7 @@ categories: Java/Spring
 
 
 
-스프링 부트에서 컨트롤러(웹 또는 API  계층)를 테스트하기위한 여러 방법들이 있다. 몇몇은 순수한 단위테스트를 작성하기위한 지원들을 해주고 다른 몇몇은 통합테스트에 유용하다. 이 포스트에서는 standalone모드에서 MockMVC를 사용하여 스프링에서 사용가능한 크게 세가지의 테스트를 다룰 것이다.
+스프링 부트에서 컨트롤러(웹 또는 API  계층)를 테스트하기위한 여러 방법들이 있습니다. 몇몇 방법은 순수한 단위테스트를 작성하는데 도움이 되고 또 몇몇은 통합테스트에 유용합니다. 이 포스트에서는 스프링 standalone모드에서 MockMVC를 사용한 세가지의 접근법을 다룰 것입니다.
 
 
 
@@ -88,9 +88,9 @@ categories: Java/Spring
 
 ### Introduction ( 도입 )
 
-**스프링 부트**에서는 테스팅을 위한 몇가지 접근법들이 있다. 이것들은 지속적으로 진화하는 framework이고, 새로운 버전에는 더 많은 옵션들이 추가된다. 동시에 이전의 것들은 하위 호환성을 위해 유지된다. 그 결과로 코드의 일부를 테스트 하기위한 수많은 방법들이 생겼고, 언제 무엇을 사용해야하는지 불명확해졌다.  이 글에서는 독자들이 테스트를 위한 다른 관점들을 이해하도록 돕고, 각 방법들이 왜 유용한지, 또 언제 써야하는지 설명할 것이다. 
+**스프링 부트**에서는 테스팅을 위한 몇가지 접근법들이 있다. 스프링 부트는 지속적으로 진화하는 framework이고, 새로운 버전에는 더 많은 옵션들이 추가되고 구버전은 하위 호환성을 위해 유지됩니다. 그 결과로 코드의 일부를 테스트 하는 방법들이 생겼고, 언제 어떤 테스트 방법을 적용해야하는지 불명확해졌다. 이 글에서는 독자들이 여러 테스트방법들의 다른 관점을 이해하도록 돕고 각 방법들이 왜 유용한지, 언제 쓰는게 좋은지 설명할 것입니다. 
 
-이 글에서는 가장 모호한 부분인 Controller 테스팅에 초점을 맞춘다. 컨트롤러 테스트는 mocking 객체가 각기 다른 레벨들에서 쓰여질수 있는 등의 이유로 가장 모호하기 때문에.
+이 글에서는 mocking 객체가 각기 다른 레벨들에서 쓰여질수 있는 등의 이유로 가장 모호하므로.  Controller 테스팅에 대해 중점적으로 다루겠습니다. 
 
 
 
@@ -102,11 +102,11 @@ categories: Java/Spring
 
 > 이글의 모든 코드는 [GitHub: Spring Boot Testing Strategies](https://github.com/mechero/spring-boot-testing-strategies) 에서 이용가능하다. ( 이 코드가 유용하다고 생각하면 star을 눌러주세요! )
 
-요약하자면, 위 코드는 REST API를 통해 공개된 entity들(superheroes)의 저장소이다.  다른 전략들을 사용할때 발생하는 일들에 대해 더 나은 이해를 하기위해각 예시의 몇몇 특징들을 나열하는것도 중요하다.
+요약하자면, 위 코드는 REST API를 통해 공개된 entity들(superheroes)의 저장소이다. 다른 전략들을 사용할때 발생하는 일들에 대해 좀 더 잘 이해하려면 각 예시의 몇몇 특징들을 나열하는것도 중요하다.
 
-- 만약에 슈퍼히어로가 식별자를 통해 찾아지지 않는다면, NonExistingHeroException이 던져진다. 이 안에는 예외를 발생시켜주고, 이것을 404코드(NOT_FOUND)로 변환해주는 스프링의 @RestControllerAdvice 어노테이션이 있다.
+- 만약에 superhero가 id로 찾아지지 않는다면, NonExistingHeroException이 발생한다. 이 안에는 예외를 발생시켜주고, 이것을 404코드(NOT_FOUND)로 변환해주는 스프링의 @RestControllerAdvice 어노테이션이 있다.
 
-- SuperHeroFilter 클래스는 우리의 HTTP통신에서 HTTP Response 헤더에 `X-SUPERHERO-APP` 을 추가하기 위해 사용될 것이다.
+- HTTP통신에서 HTTP Response 헤더에 `X-SUPERHERO-APP` 을 추가하기 위해 SuperHeroFilter 클래스룰 사용할 것이다.
 
 
 
@@ -116,11 +116,11 @@ categories: Java/Spring
 
 먼저, 서버사이드와 클라이언트 사이드를 분리해보자.
 
-서버사이드 테스트는 가장 확장된 방식의 테스팅이다. 우리는 request를 보내보고 서버가 어떻게 행동하는지, response의 구성과 컨텐츠등을 체크 할 수 있다.
+서버사이드 테스트는 가장 확장된 방식의 테스트이다. request를 보내보고 서버가 어떻게 행동하는지 볼 수 있고, response의 구성과 내용 등을 체크할 수 있다.
 
-클라이언트 사이드 테스트는 자주 쓰이지는 않지만, 당신이 request의 구성과 동작(http method)를 검증하고 싶을때 유용하다. 이러한 테스트들에서 당신은 서버의 행동을 mock(가짜로 구성)하고, 몇몇 코드를 호출하여 서버로 간접적으로 request를 보내볼 수있다. 이를 통해 우리는 정확하게 request요청이 있음을 알수 있고, 그 내용을 확인하고 테스트 할 수 있다. 당신은 response의 내용을 신경쓸 필요가 없다( 가짜로 구성 했었음). 아쉽게도 이 내용에 대한 좋은 예시는 많이 없다.  [공식 문서](https://github.com/spring-projects/spring-framework/blob/master/spring-test/src/test/java/org/springframework/test/web/client/samples/SampleTests.java) 를 봐도 크게 도움되지 않는다. 어쨋든, 중요한점은 이것들이 우리가 client application을 작성 할때, 우리쪽에서 세계로 나가는 request들을 검증할때 사용될 수 있다는 것이다.
+클라이언트 사이드 테스트는 자주 쓰이지는 않지만, request가 어떻게 구성되어 있는지, 또 어떤 http method를 사용하는지 검증하고 싶을때 유용하다. 이 테스트에서는 서버의 행동을 mock(가짜로 구성)하고, 클라이언트에서 몇몇 코드를 호출하여 서버로 간접적으로 request를 보내볼 수있다. 이를 통해 정확하게 request요청이 있음을 알 수 있고, 그 내용을 검증 할 수 있다. response의 내용은 가짜로 구성 했었기에 신경쓰지 않아도 된다. 아쉽게도 이 내용에 대한 좋은 예시는 많이 없다.  [javadoc에서 제공한 예시](https://github.com/spring-projects/spring-framework/blob/master/spring-test/src/test/java/org/springframework/test/web/client/samples/SampleTests.java) 를 봐도 마찬가지이다. 어쨌든, 여기에서 중요한 점은 클라이언트 사이드 테스트는 클라이언트 어플리케이션을 만들 때 사용할 수 있고, 클라이언트에서 밖으로 나가는 request들을 검증하고 싶을때도 사용할 수 있다는 것이다.
 
-우리는 서버사이드 테스트에 초첨을 맞출것이다. 이는 어떻게 서버 로직이 동작하는지 확인하기 위한 것이다. 이때 당신은 보통 request를 mock(가짜로 구성)하고, 어떻게 서버가 반응하는지 체크하려고 할것이다. 스프링에서 이러한 종류의 테스트들은 어플리케이션에서 Controller Layer과 밀접한 연관이 있다. (Controller Layer가 Spring에서 HTTP handling을 담당하는 부분이기 때문에)
+**이 글에서는 서버사이드 테스트에 초점을 맞출것이다.** 이를 통해 서버 로직이 어떻게 동작하는지 확인할 수 있다. 클라이언트 테스트는 보통 request를 mock(가짜로 구성)해서 어떻게 서버가 어떻게 반응하는지 체크한다. 스프링에서 이러한 종류의 테스트들은 어플리케이션의 Controller Layer과 밀접한 연관이 있는데, 이는 Controller Layer가 Spring에서 HTTP handling을 담당하는 부분이기 때문이다.
 
 
 
@@ -128,7 +128,7 @@ categories: Java/Spring
 
 ### Server-Side Tests
 
-서버사이드 테스트의 안을 들여다보면, 우리가 스프링에서 구별할 수 있는 두가지 방식이 있다. 첫번째는 MockMVC접근을 사용하여 Controller 테스트를 작성하는 것이고, 두번째는 RestTemplate을 이용하는 것이다. 만약에 당신이 Real 단위 테스트를 작성하고 싶다면, 첫번째 방식(MockMVC)를 택해야한다. 반면 통합테스트를 작성하고 싶다면 RestTemplate을 사용해야한다. 왜냐면 MockMVC를 이용하면 Controller에 대한 assertion(참이라고 가정되는 조건문)들을 [fine-grain](https://icthuman.tistory.com/entry/FineGrained-vs-CoarseGrained) 할수있다 (= 컨트롤러에 대한 테스트를 세분화 할수 있다는 의미). 반면 RestTemplate은 Spring의 WebApplicationContext를 (Standalone모드 여부에 따라 부분적으로 또는 완전히) 이용한다. 이 두가지에 대해 더 자세히 설명해보자.
+서버사이드 테스트들을 자세히 보면, 방법을 두가지로 분류할 수 있다. 첫번째는 MockMVC 접근법을 사용하여 Controller 테스트를 작성하는 것이고, 두번째는 RestTemplate을 이용하는 것이다. 만약에 당신이 **진짜** 단위 테스트를 작성하고 싶다면, 첫번째 방식(MockMVC)를 택해야한다. 반면 통합테스트를 작성하고 싶다면 RestTemplate을 사용해야 한다. 왜냐하면 MockMVC를 이용하면 컨트롤러에 대한 테스트를 세분화 할 수 있기 때문이다. 반면 RestTemplate은 Spring의 WebApplicationContext를 (Standalone모드 여부에 따라 부분적으로 또는 완전히) 이용한다. 이 두가지에 대해 더 자세히 이해해보자.
 
 
 
@@ -136,7 +136,7 @@ categories: Java/Spring
 
 ### Inside-Server Tests
 
-우리는 우리의 Controller의 로직을 웹서버를 구동하지 않고도 직접 테스트 할 수 있다. 이것을 바로 "inside-server testing"이라 부르고 이 테스팅은 단위 테스트의 개념에 더 가깝다. 이를 가능하게 하려면, 당신은 전체 웹서버의 행동을 mock해야한다. 그래서 어느정도는 테스트 되어야할 부분들을 놓치곤 할 것이다. 하지만 여기서 놓친 부분들은 통합 테스트에서 완전히 커버되기 때문에 걱정하지 않아도 된다. 
+우리는 우리의 Controller의 로직을 웹서버를 구동하지 않고도 직접 테스트 할 수 있다. 이것을 바로 "inside-server testing"이라 부르는데, 이 테스팅은 단위 테스트의 개념에 더 가깝다. 이를 가능하게 하려면, 당신은 전체 웹서버의 행동을 mock해야한다. 그래서 테스트해야 하는 몇몇 부분들을 놓치기도 할 것이다. 하지만 여기서 놓친 부분들은 통합 테스트에서 완전히 커버되기 때문에 걱정하지 않아도 된다. 
 
 
 
