@@ -2,7 +2,7 @@
 title: "[Spring/번역] 컨트롤러 테스트 가이드 in Spring Boot"
 date: 2019-03-16 18:09:28 -0400
 categories: Java/Spring
-
+tags : Java/Spring
 ---
 
 # Spring Boot에서 RestController에 대한 단위 테스트, 통합 테스트를 하는 방법
