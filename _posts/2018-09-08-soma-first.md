@@ -2,6 +2,7 @@
 title: "소마 프로젝트 - 9월 1주차"
 date: 2019-03-10 21:26:28 -0400
 categories: project soma
+tags: project/soma
 ---
 
 팀원과 모여서 라이브 코딩을 하는날이다. 드디어 navigation flow 피드백을 받게 될거라 생각했지만 팀원들은 잘 이해도 가지 않는듯 하다. 관심도 없는것 같다!?..
