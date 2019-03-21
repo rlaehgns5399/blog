@@ -34,8 +34,8 @@ categories: Java/Spring
    ​	4.1.1. [MockMVC standalone code example](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#MockMVC_standalone_code_example)
    ​	
 
-   ​		4.1.1.1. [MockitoJUnitRunner and MockMVC](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#MockitoJUnitRunner_and_MockMVC)
-   ​	
+   ​			4.1.1.1. [MockitoJUnitRunner and MockMVC](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#MockitoJUnitRunner_and_MockMVC)
+   
    ​			4.1.1.2. [JacksonTester initialization](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#JacksonTester_initialization)
 
    ​			4.1.1.3. [Configure the Standalone Setup in MockMVC](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Configure_the_Standalone_Setup_in_MockMVC)
@@ -49,7 +49,7 @@ categories: Java/Spring
    ​	4.2.1. [MockMVC and WebMvcTest code example](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#MockMVC_and_WebMvcTest_code_example)
 
    ​			4.2.1.1. [SpringRunner](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#SpringRunner)
-
+   
    ​			4.2.1.2. [MockMVC Autoconfiguration](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#MockMVC_Autoconfiguration)    		
 
    ​			4.2.1.3. [Overriding beans for testing using MockBean](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Overriding_beans_for_testing_using_MockBean)
