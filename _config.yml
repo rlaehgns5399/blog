@@ -284,7 +284,7 @@ compress_html:
 comments:
   provider               : "disqus"
   disqus:
-    shortname            : dev-hundred-blog # Short-name
+    shortname            : pushstone # Short-name
 
 defaults:
   # _posts
