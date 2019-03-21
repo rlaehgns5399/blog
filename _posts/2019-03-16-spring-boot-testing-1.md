@@ -37,23 +37,23 @@ categories: Java/Spring
    ​		4.1.1.1. [MockitoJUnitRunner and MockMVC](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#MockitoJUnitRunner_and_MockMVC)
    ​	
    ​			4.1.1.2. [JacksonTester initialization](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#JacksonTester_initialization)
-   ​		
+
    ​			4.1.1.3. [Configure the Standalone Setup in MockMVC](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Configure_the_Standalone_Setup_in_MockMVC)
-   ​		
+
    ​			4.1.1.4. [Testing ControllerAdvices and Filters with MockMVC](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Testing_ControllerAdvices_and_Filters_with_MockMVC)
-   ​		
+
    ​			4.1.1.5. [Better Assertions with BDDMockito and AssertJ](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Better_Assertions_with_BDDMockito_and_AssertJ)
 
    4.2. [Strategy 2: MockMVC with WebApplicationContext](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Strategy_2_MockMVC_with_WebApplicationContext) 
 
    ​	4.2.1. [MockMVC and WebMvcTest code example](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#MockMVC_and_WebMvcTest_code_example)
-   ​		
+
    ​			4.2.1.1. [SpringRunner](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#SpringRunner)
-   ​    		
-   ​			4.2.1.2. [MockMVC Autoconfiguration](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#MockMVC_Autoconfiguration)
-   ​    		
+
+   ​			4.2.1.2. [MockMVC Autoconfiguration](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#MockMVC_Autoconfiguration)    		
+
    ​			4.2.1.3. [Overriding beans for testing using MockBean](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Overriding_beans_for_testing_using_MockBean)
-   ​    		
+
    ​			4.2.1.4. [No server calls](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#No_server_calls)
 
    ​	4.2.2. [Using MockMVC with a Web Application Context – Conclusions](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Using_MockMVC_with_a_Web_Application_Context_Conclusions)
@@ -65,13 +65,13 @@ categories: Java/Spring
    5.2. [Strategy 4: SpringBootTest with a Real Web Server](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Strategy_4_SpringBootTest_with_a_Real_Web_Server)
    	
    ​	5.2.1. [Spring Boot Test Code Example](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Spring_Boot_Test_Code_Example)
-   
+
    ​			5.2.1.1. [Web Server Testing](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Web_Server_Testing)
-   ​				
-   ​			5.2.1.2. [Mocking layers](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Mocking_layers)
-   ​				
+
+   ​			5.2.1.2. [Mocking layers](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Mocking_layers)				
+   
    ​			5.2.1.3. [TestRestTemplate](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#TestRestTemplate)
-   ​				
+   
    ​	5.2.2. [SpringBootTest approach – Conclusions](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#SpringBootTest_approach_Conclusions)
 
    5.3. [Performance and Context Caching](https://thepracticaldeveloper.com/2017/07/31/guide-spring-boot-controller-tests/#Performance_and_Context_Caching)
