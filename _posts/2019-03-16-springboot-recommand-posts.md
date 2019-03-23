@@ -1,9 +1,15 @@
 ---
-title: "[Develop] 개발 관련글"
+title: "[Develop] 개발 관련글 정리"
 date: 2019-03-21 19:17:28 -0400
 categories: Develop
 tags : Develop
 ---
+
+
+
+> 스프링 스터디에서 공유된 개발관련 글a들 저장소
+
+
 
 ## 개발
 
