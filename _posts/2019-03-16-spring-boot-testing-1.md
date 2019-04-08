@@ -1,6 +1,6 @@
 ---
 title: "[Spring/번역] Spring Boot RESTful Service를 위한 유효성 검사방법"
-date: 2019-08- 16:09:28 -0400
+date: 2019-04-08 16:09:28 -0400
 categories: Java/Spring
 tags : Java/Spring
 ---
