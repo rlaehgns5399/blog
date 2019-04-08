@@ -5,17 +5,13 @@ categories: Java/Spring
 tags : Java/Spring
 ---
 
-> 이글은 [IN 28 MINUTES](http://www.springboottutorial.com/)님의 게시글인  **"[Implementing Validation for RESTful Services with Spring Boot](http://www.springboottutorial.com/spring-boot-validation-for-rest-services)"** 을 번역한 글임을 밝힙니다.
+> 이글은 [IN 28 MINUTES](http://www.springboottutorial.com/)님의 게시글인  **"[Implementing Validation for RESTful Services with Spring Boot](http://www.springboottutorial.com/spring-boot-validation-for-rest-services)"** 을 번역한 글임을 밝힙니다.  
 >
 
 
-이 가이드는 Spring Boot 에서 REST API/Service에 대한 유효성 검사를 효율적으로하도록 도와줄것이다.
-
-
+이 가이드는 Spring Boot 에서 REST API/Service에 대한 유효성 검사를 효율적으로하도록 도와줄것이다.  
 
 # 학습내용
-
-
 
 - 유효성 검사(validation) 란?
 
@@ -29,9 +25,7 @@ tags : Java/Spring
 
 - 스프링부트에서 유효성 검사를 어떻게 수행하는가?
 
-- Bean Validation API로 어떻게 유효성 검사를 수행하는가?
-
-
+- Bean Validation API로 어떻게 유효성 검사를 수행하는가?  
 
 # REST API 추천 강좌
 
@@ -55,7 +49,7 @@ tags : Java/Spring
 - [Mockito Tutorial for Beginners in 5 Steps](https://courses.in28minutes.com/p/mockito-for-beginner-in-5-steps)
 - [Complete in28Minutes Course Guide](https://courses.in28minutes.com/p/in28minutes-course-guide)
 
-
+  
 
 # 예시 프로젝트 코드 구조
 
@@ -71,19 +65,21 @@ tags : Java/Spring
 - `StudentNotFoundException.java` - student가 탐색되지 않을때 던지는 에러
 - `data.sql` - student table을 위한 초기데이터 파일. 스프링 부트는 엔티티들로부터 테이블이 생성된 이후에 이 스크립트 파일을 실행한다.
 
+  
 
-
-# Tools you will need
+## Tools you will need
 
 - Maven 3.0이상의 빌드 툴
 - 선호하는 IDE. 본문은 Eclipse를 사용한다.
 - JDK 1.8+
 
-# Complete Maven Project With Code Examples
+  
+
+## Complete Maven Project With Code Examples
 
 > [완성된 예시코드가 있는 Github 리파지토리](https://github.com/in28minutes/spring-boot-examples/tree/master/spring-boot-2-rest-service-validation)
 
-
+  
 
 # 1. 유효성 검사란?
 
@@ -93,7 +89,7 @@ tags : Java/Spring
 
 잠시 생각해보라. 어떻게 해야할까?
 
- `Something went wrong.`.  이라는 메세지를 돌려주는 방법법은 어떨까. 충분할까?
+ `Something went wrong.`.  이라는 메세지를 돌려주는 방법은 어떨까. 충분할까?
 
 RESTful service의 핵심 디자인 원리중 하나는 아래와 같다.
 
@@ -105,23 +101,23 @@ RESTful service의 핵심 디자인 원리중 하나는 아래와 같다.
 
 - 어떤점이 잘못됬는지 나타내는 메세지 : 어느 field가 에러를 가지고 있고, 올바른 field의 형태는 무엇인가, 어떻게 에러를 해결하는가
 - 올바른 Reponse 상태코드 : Bad Request.
-- Response에 중요한 정보는 포함시키면 안된다.
+- Response에 중요한 정보는 포함시키면 안된다.  
 
-
+  
 
 ## 유효성 에러에 대한 Response 상태코드
 
-유효성 에러에 대한 권장 상태코드는 400 - BAD REQUEST 이다.
+유효성 에러에 대한 권장 상태코드는 400 - BAD REQUEST 이다.  
 
+  
 
-
-# REST Resouce로 프로젝트를 간단하게 구성하기
+## REST Resouce로 프로젝트를 간단하게 구성하기
 
 [이전 기사](http://www.springboottutorial.com/spring-boot-crud-rest-service-with-jpa-hibernate)에서,CRUD 메서드를 포함한 리소스로 간단한 restful service를 생성했다.
 
-> 예외 핸들링에 대해 공부하기 위해 같은 샘플코드를 사용할 것이다.
+> 예외 핸들링에 대해 공부하기 위해 같은 샘플코드를 사용할 것이다.  
 
-
+---
 
 # 2. 스프링 부트로 기본적인 Validation 하기
 
@@ -143,7 +139,7 @@ body(본문)을 기다리는 메소드에 잘못된 JSON 컨텐르츠를 보내�
 
 ## 타당하지만 누락된 요소가 있는 JSON
 
-만약 타당한 JSON 구조에 속성/요소를 없거나/타당하지 않게 보내면,  어플리케이션은쓸수있는 아무데이터나 포함시켜서 request를 실행합니다.
+만약 타당한 JSON 구조에 속성/요소를 없거나/타당하지 않게 보내면,  어플리케이션은쓸수있는 아무데이터나 포함시켜서 request를 실행합니다.  
 
 **아래의 request는 201 Created 상태코드로 실행됩니다.**
 
@@ -157,7 +153,7 @@ POST `http://localhost:8080/students`
 }
 ```
 
-
+  
 
 **아래의 request도 201 Created 상태코드로 실행됩니다.**
 
@@ -172,17 +168,19 @@ Request Content
 }
 ```
 
-위 요청에 잘못된 속성인 name1이 있음을 알 수 있다.
+위 요청에 잘못된 속성인 name1이 있음을 알 수 있다.  
+
+
 
 아래는 `http://localhost:8080/students` 에 GET요청을 보냈을때의 Response이다.
 
 [ { “id”: 1, “name”: null, “passportNumber”: null }, { “id”: 2, “name”: null, “passportNumber”: “A12345678” }, { “id”: 10001, “name”: “Ranga”, “passportNumber”: “E1234567” }, { “id”: 10002, “name”: “Ravi”, “passportNumber”: “A1234568” } ]
 
-id가 1과 2인 리소스에서 바르지 않은값이 null로 생성된 것을 확인 할 수 있다. 타당하지 않은 요소나 속성들은 무시된다.
+id가 1과 2인 리소스에서 바르지 않은값이 null로 생성된 것을 확인 할 수 있다. 타당하지 않은 요소나 속성들은 무시된다.  
 
+  
 
-
-# 3. 유효성 검사 커스터마이징 하기
+# 3. 유효성 검사 커스터마이징 하기. 
 
 유효성을 커스터마이징 하기 위해서, 이글에서는 bean validation api의 구현체인 Hibernate Validator를 사용한다.
 
@@ -213,6 +211,8 @@ public class Student {
   
 ```
 
+  
+
 Bean Validation API는 이런 종류의 어노테이션을 많이 제공한다. 대부분은 이해하기 쉬운 것들이다.
 
 - DecimalMax
@@ -235,7 +235,7 @@ Bean Validation API는 이런 종류의 어노테이션을 많이 제공한다. 
 - Positive
 - PositiveOrZero
 
-
+  
 
 ## Resource에서 유효성 검사를 하는 방법
 
@@ -248,6 +248,8 @@ public ResponseEntity<Object> createStudent(@Valid @RequestBody Student student)
 끝이다.
 
 제약조건과 맞지않는 속성값을 가지고 request를 보내면, 404 BAD Request상태 코드가 리턴된다.
+
+  
 
 Request
 
@@ -263,7 +265,7 @@ Request
 - 사용자는 이것이 bad request라는 것을 안다.
 - 하지만, 무엇을 잘못한 것인지는? 어떤 요소가 유효성검사를 통과하지 못했을까?어떻게 고쳐야 할까?
 
-
+  
 
 ## 유효성 검사 Response를 커스터마이징 하기
 
