@@ -26,7 +26,7 @@ tags : Develop
   1. [개발자를 위한 인프라 기초 총정리](https://futurecreator.github.io/2018/11/09/it-infrastructure-basics/)
      - 시간날때마다 읽어서 달달 외워야하는 인프라 상식들 집합입니다. 
 
-
+  2. [도메인 주도 설계의 본질](https://www.slideshare.net/mobile/baejjae93/ss-27536729)
 
 ---
 
