@@ -1,6 +1,6 @@
 ---
-title: "[Spring/Project] "Jenkins 사용 무작정 따라하기"
-date: 2019-04-20 02:25:28 -0400
+title: "[Spring/Project] Jenkins 사용 무작정 따라하기"
+date: 2019-04-22 02:25:28 -0400
 categories: Java/Spring Project
 ---
 
