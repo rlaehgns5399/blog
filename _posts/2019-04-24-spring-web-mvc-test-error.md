@@ -154,6 +154,6 @@ public class JpaEnableConfiguration {
 
 테스트가 실패 하였지만, 깨지는 오류는 해결된 것을 볼 수 있다.
 
-![image-20190426154248783](/Users/dadadamarine/Desktop/study/blog/dadadamarine.github.io/_posts/assets/images/image-20190426154248783.png)
+![image-20190426154248783](/assets/images/image-20190426154248783-6262586.png)
 
 ### 
