@@ -1,7 +1,7 @@
 ---
 title: "[Spring/Project] Repository Delete시 동작과 child entity 삭제"
 date: 2019-04-27 02:25:28 -0400
-categories: Java/Spring Project
+categories: Java/Spring
 ---
 
 # 개요

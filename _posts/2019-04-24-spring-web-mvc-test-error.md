@@ -1,7 +1,7 @@
 ---
 title: "[Spring/Project] @WebMvcTest ComponentScan으로 인한 에러 해결기"
 date: 2019-04-24 02:25:28 -0400
-categories: Java/Spring Project
+categories: Java/Spring
 ---
 
 

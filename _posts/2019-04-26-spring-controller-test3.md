@@ -1,7 +1,7 @@
 ---
 title: "[Spring/Project] Annotationed Parameter가 있는 Controller에 대한 단위테스트 작성법"
 date: 2019-04-26 05:25:28 -0400
-categories: Java/Spring Project
+categories: Java/Spring
 ---
 
 
