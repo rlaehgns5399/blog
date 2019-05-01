@@ -5,6 +5,7 @@ categories: Java/Spring Notification/project
 ---
 
 
+
 # 개요
 
 현재 **서버 환경구축**과, Jenkins를 활용하여 **테스트, 빌드 자동화**까지 설정하였다.

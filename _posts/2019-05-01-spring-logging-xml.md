@@ -4,6 +4,8 @@ date: 2019-05-01 02:25:28 -0400
 categories: Java/Spring
 ---
 
+
+
 # What is logback?
 
 SLF4J의 native 구현체. 왜 SLF4J를 함께 사용해야 하는지에 대한 내용은 [참조](<https://inyl.github.io/programming/2017/05/05/slf4j.html>)의 글을, 이 원리에 대한 내용은 [참조](<https://gmlwjd9405.github.io/2019/01/04/logging-with-slf4j.html>)의 글을 추천드립니다.
