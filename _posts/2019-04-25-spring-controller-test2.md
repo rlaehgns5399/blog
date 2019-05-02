@@ -331,3 +331,14 @@ Basic authentication은 HTTP프로토콜이 제공하는 자체적인 인증 기
 
 이 인증 로직은 MockitoJUnitRunner를 활용 HandlerMethodArgumentResolverTest라는 테스트 코드를 작성함으로 써 따로 단위테스트가 가능하다. 
 
+
+
+# 결론
+
+해당 테스트는 단위테스트의 범위를 조금 벗어난 spring의 주변요소와 함께하는 컨트롤러에 대한 단위테스트였다.
+
+이 테스트를 통해서 @AdminUser라는 어노테이션으로 로그인 되지 않은 유저에 대해 권한 제어가 정상적으로 이루어 짐을 확인 할 수 있었다.
+
+다음은 **@AdminUser 어노테이션의 기능을 Mocking해서 컨트롤러의 비즈니스 로직에 대한 단위테스트**를 구현한다.
+
+그 후 **로그인한 유저에 대한 AcceptanceTest**도 구현하고 테스트를 마무리한다.
