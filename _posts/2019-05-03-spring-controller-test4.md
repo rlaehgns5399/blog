@@ -1,6 +1,6 @@
 ---
-title: "[Spring/Project] 로그인을 건너뛰는 acceptanceTest 작성"
-date: 2019-05-01 05:25:28 -0400
+title: "[Spring/Project] 권한 체크를 건너뛰는 AcceptanceTest 작성"
+date: 2019-05-03 05:25:28 -0400
 categories: Java/Spring
 ---
 
@@ -33,7 +33,7 @@ Basic authentication은 HTTP프로토콜이 제공하는 자체적인 인증 기
 
 
 
-# AcceptanceTest
+# 부모클래스 AcceptanceTest
 
 > 테스트 방법론의 내용은 블로그 [[Spring/번역] 컨트롤러 테스트 가이드 in Spring Boot](<https://dadadamarine.github.io/java/spring/spring-boot-validation/#>)를 참조하시길 바랍니다.
 > 
@@ -49,6 +49,12 @@ Basic authentication은 HTTP프로토콜이 제공하는 자체적인 인증 기
 
 
 ## AcceptanceTest.class
+
+먼저 다른 AcceptanceTest에서 상속받아 사용할 부모클래스를 정의한다.
+
+이 클래스는 TestRestTemplate를 이용하여 BasicAuth Request생성하는 것을 정의한 클래스이다.
+
+
 
 ```java
 @RunWith(SpringRunner.class)
@@ -317,13 +323,11 @@ Authorization이 담긴 request를 생성하는 메서드를 구현해보자.
         MockHttpServletRequest request = basicAuthHttpRequest(userId, password);
         AccountLoginDTO loginAccountDTO = new AccountLoginDTO(userId, password);
         Account loginAccount = new Account(userId, password, "name", "manager@email.net");
-        when(accountService.findAccount(loginAccountDTO)).thenReturn(loginAccount);
-
+        when(accountRepository.findByUserId(userId)).thenReturn(Optional.of(loginAccount));
 
         //when
         //TODO: preHandle(request, null, null) 메서드를 호출한다.
         basicAuthInterceptor.preHandle(request, null, null);
-
 
         //then
         //TODO: 이후 preHandle의 처리대로 request의 session에 유저 정보가 들어갔는지 확인한다.
@@ -335,31 +339,196 @@ Authorization이 담긴 request를 생성하는 메서드를 구현해보자.
 
 ### BasicAuthInterceptor 작성
 
+ 
 
+>따라서 Interceptor 코드의 흐름은
+>
+>1. 이 http header를 가져와서 값을 디코딩하여 Id와 password를 도출해낸다.
+>2. 그 후 id와 password가 체크되면 이를 세션에 담아 "로그인 됨"을 구현하여 컨트롤러로 request를 보낸다.
+>
+>이 로직으로 코드를 짠다.
 
- **HttpServletRequest**
+ 
+
+**HttpServletRequest**
 
 request는 다음과 같이 구성되어있다.
 
-![image-20190502181347228](/Users/dadadamarine/Desktop/study/blog/dadadamarine.github.io/_posts/assets/images/image-20190502181347228.png)
+![image-20190502181347228](/assets/images/image-20190502181347228.png)
 
 
 
 **preHandle 메서드**
 
 ```java
-        String authorization = request.getHeader("Authorization");
-        if(authorization==null || !authorization.startsWith("Basic")){
+     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        String base64Credentials;
+        try{
+            base64Credentials = getEncodedCredentials(request);
+            String[] credentialValues = getDecodedCredentials(base64Credentials);
+            String userId = credentialValues[0];
+            String password = credentialValues[1];
+            log.debug("userId : {}", userId);
+            log.debug("password : {}", password);
+            login(request, userId, password);
+            return true;
+        }catch (UnAuthenticationException e){
             return true;
         }
-        String base64Credentials = authorization.substring("Basic".length()).trim();
+    }
+
+    public String getEncodedCredentials(HttpServletRequest request){
+        String authorization = request.getHeader("Authorization");
+        if(authorization==null || !authorization.startsWith("Basic")){
+            throw new UnAuthenticationException();
+        }
+        return authorization.substring("Basic".length()).trim();
+    }
+
+    public String[] getDecodedCredentials(String base64Credentials) {
+        String credentials = new String(Base64.getDecoder().decode(base64Credentials), Charset.forName("UTF-8"));
+        return credentials.split(":",2);
+    }
+
+    public void login(HttpServletRequest request, String userId, String password) {
+        Account account = accountRepository.findByUserId(userId).orElseThrow(UnAuthenticationException::new);
+
+        if(account.matchPassword(password)){
+            request.getSession().setAttribute(SessionUtils.USER_SESSION_KEY, account);
+        }
+    }
+```
+
+1. **getEncodedCredentials** : 인코딩된 Credentials 스트링을 반환함 (userId:password의 형태). 만약 BasicAuth 헤더가 없거나 올바른 값이 아닐경우 return true (컨트롤러로 넘김)
+2. **getDecodedCredentials**: 디코딩된 Id와 password를 배열로 반환함.
+3. **login**: session에 등록하여 로그인된 상태로 만듬.
+4. **try - catch** : 동작중에 에러 발생시 컨트롤러로 넘어감.
+
+
+
+### Interceptor Unit Test 결과
+
+![image-20190503024916024](/assets/images/image-20190503024916024.png)
+
+
+
+## Configuration 수정
+
+이제 구현한 Interceptor를 등록해 주어야한다.
+
+
+
+**WebMvcConfigurer**
+
+```java
+@Configuration
+public class WebMvcConfig implements WebMvcConfigurer {
+
+    ...
+
+    @Bean
+    public BasicAuthInterceptor basicAuthInterceptor(){
+        return new BasicAuthInterceptor();
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(basicAuthInterceptor());
+    }
+}
 ```
 
 
 
-헤더가 없거나 올바른 값이 아닐경우 return true (컨트롤러로 넘김)
+**굳이 @Bean어노테이션을 붙인 basicAuthInterceptor()를 구현한 이유**
 
-[String.startWith(String prefix)](<https://www.tutorialspoint.com/java/java_string_startswith.htm>)
+@Bean으로 인해 스프링에서 BasicAuthInterceptor인스턴스를 빈으로 관리한다. (Inversion of Control)
+
+IOC되지 않은 객체는 스프링에서 @Autowired를 스캔해서 CategoryAcceptanceTest에서 빈을 주입해줄때 생성된 target bean이 없어 주입되지 않는다.
+
+즉. @Bean으로 선언해야 Autowired된 BasicAuthInterceptor를 사용할 수 있다.
 
 
 
+# CategoryAcceptanceTest
+
+**다른 AcceptanceTest들은 정의해둔 AcceptanceTest.class 상속해서 사용한다.**
+
+
+
+![image-20190503025624232](/assets/images/image-20190503025624232.png)
+
+<center>category RestAPI에서 비즈니스 로직에 권한체크를 구현한 이후 깨지는 메서드들.</center>
+
+
+
+## CategoryAcceptanceTest 수정
+
+```java
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = RANDOM_PORT)
+public class CategoryAcceptanceTest extends AcceptanceTest {
+    private static Logger log = LoggerFactory.getLogger(CategoryAcceptanceTest.class);
+
+    @Autowired
+    private MenuCategoryRepository menuCategoryRepository;
+
+    private static BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+    ...
+
+    @Test
+    public void api_create_test() {
+        MenuCategoryDTO category = new MenuCategoryDTO();
+        category.setName("새로운 자식");
+        category.setParentId(1l);
+        //ResponseEntity<MenuCategory> response = sendPost("/api/menuCategory", category, MenuCategory.class);
+		ResponseEntity<MenuCategory> response = 
+                sendPostWithDefaultManager("/api/menuCategory", category, MenuCategory.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(response.getBody().getName()).isEqualTo("새로운 자식");
+    }
+
+    @Test
+    public void api_create_category_test() {
+        MenuCategoryDTO category = new MenuCategoryDTO();
+        category.setName("새로운 카테고리");
+        //ResponseEntity<MenuCategory> response = sendPost("/api/menuCategory", category, MenuCategory.class);
+        ResponseEntity<MenuCategory> response = 
+                sendPostWithDefaultManager("/api/menuCategory", category, MenuCategory.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(response.getBody().getName()).isEqualTo("새로운 카테고리");
+    }
+
+    @Test
+    public void api_delete_test() {
+        MenuCategoryDTO category = new MenuCategoryDTO();
+        category.setName("새로운 삭제된 카테고리");
+        //ResponseEntity<MenuCategory> responseByPost = sendPost("/api/menuCategory", category, MenuCategory.class);
+        //ResponseEntity<MenuCategory> responseByDelete = sendDelete("/api/menuCategory/" + responseByPost.getBody().getId(), MenuCategory.class);
+
+        ResponseEntity<MenuCategory> responseByPost = 
+                sendPostWithDefaultManager("/api/menuCategory", category, MenuCategory.class);
+        ResponseEntity<MenuCategory> responseByDelete = 
+                sendDeleteWithDefaultManager("/api/menuCategory/" + responseByPost.getBody().getId(), MenuCategory.class);
+        
+        assertThat(responseByDelete.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseByDelete.getBody().getName()).isEqualTo("새로운 삭제된 카테고리");
+    }
+
+}
+```
+
+각 request들을 BasicAuth를 포함한 request로 수정해준다.
+
+
+
+## 테스트결과
+
+![image-20190503033013675](/assets/images/image-20190503033013675.png)
+
+
+
+성공!
