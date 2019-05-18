@@ -4,6 +4,10 @@
 
 
 
+
+
+
+
 filesystem : 스토리지에서 파일을 읽고 쓰는것.
 
 ![image-20190502135033001](/Users/dadadamarine/Desktop/study/blog/dadadamarine.github.io/_posts/assets/images/image-20190502135033001.png)
